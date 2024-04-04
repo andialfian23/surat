@@ -4,7 +4,7 @@
             <div class="card-header">
                 <div class="row d-flex justify-content-between">
                     <div class="col-lg-3 col-md-6 col-sm-12 mt-1">
-                        <span class="mx-2">Sample Surat Keluar</span>
+                        <span class="mx-2">Sample Surat</span>
                     </div>
                     <div class="text-right ml-auto">
                         <div class="input-group input-group-sm">
@@ -25,6 +25,7 @@
                                 <th>No</th>
                                 <th>Nama_Surat</th>
                                 <th>Kategori</th>
+                                <th>Jenis</th>
                                 <th>--</th>
                             </tr>
                         </thead>
@@ -36,6 +37,10 @@
                                 <td class="text-center"><?= $no++ ?></td>
                                 <td><?= $s->nama_surat ?></td>
                                 <td><?= $s->nama_kategori ?></td>
+                                <td><?php 
+                                    if($s->jenis=='masuk'){echo "Surat Masuk";}
+                                    else{echo "Surat Permohonan";}
+                                ?></td>
                                 <td class="text-center">
                                     <a href="<?= base_url('sample_surat/detail/'.$s->id_sample_surat) ?>"
                                         class="badge badge-warning p-1"><i class="fas fa-edit"></i> Detail</a>

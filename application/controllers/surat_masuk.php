@@ -188,10 +188,10 @@ class surat_masuk extends CI_Controller {
         
         $column_order = array('tgl_masuk', 'pengirim', 'nomor', 'perihal', 'tindakan');
                     
-        $list = $this->surat_masuk->get_datatables($column_order, $xBegin, $xEnd, $fak);
+        $query = $this->surat_masuk->get_datatables($column_order, $xBegin, $xEnd, $fak);
         
         $data   = array();
-        foreach ($list->result() as $key) {
+        foreach ($query->result() as $key) {
             $row      = array();
 
             $row['id_surat_masuk']  = $key->id_surat_masuk;
@@ -210,7 +210,7 @@ class surat_masuk extends CI_Controller {
 
         $output = array(
             "draw"              => $_POST['draw'],
-            "recordsFiltered"   => $list->num_rows(),
+            "recordsFiltered"   => $query->num_rows(),
             "recordsTotal"      => $this->surat_masuk->total_entri($xBegin, $xEnd, $fak),
             "data"              => $data,
         );

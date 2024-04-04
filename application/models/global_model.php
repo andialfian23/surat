@@ -59,11 +59,21 @@ class global_model extends CI_model {
         ];
     }
 
+    //kategori 
+    public function kategori($jenis=null){
+        if($jenis!=null){
+            $this->db->where('jenis',$jenis);
+        }
+
+        return $this->db->get('t_kategori_surat');
+    }
+
     // upload file
     public function upload_file($field, $lokasi){
         $config['upload_path'] = './'.$lokasi;
-        $config['allowed_types'] = 'pdf';
+        $config['allowed_types'] = 'pdf|jpg|png';
         $config['max_size'] = '7000';
+        $config['encrypt_name'] = true;
         $this->load->library('upload', $config);
         if ($this->upload->do_upload($field)) {
             return $this->upload->data('file_name');

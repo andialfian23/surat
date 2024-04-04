@@ -151,9 +151,9 @@ $(function() {
                 render: function(data, type, row, meta) {
                     return `<a target="_blank" href="<?= base_url('dokumen/surat_masuk/') ?>` +
                         row.file_surat + `" class="badge badge-warning"><i class="fas fa-envelope"></i> Surat</a>
-                            <a target="_blank" href="<?= base_url('dokumen/lampiran_surat_masuk/') ?>` + row
+                            <a target="_blank" href="<?= base_url('dokumen/surat_masuk/') ?>` + row
                         .file_surat + `" class="badge badge-dark"><i class="fas fa-file-alt"></i> Lampiran</a>
-                            <a target="_blank" href="<?= base_url('dokumen/berkas_surat_masuk/') ?>` + row.file_surat + `" class="badge badge-success"><i class="fas fa-file-alt"></i> Berkas Lainnya</a>
+                            <a target="_blank" href="<?= base_url('dokumen/surat_masuk/') ?>` + row.file_surat + `" class="badge badge-success"><i class="fas fa-file-alt"></i> Berkas Lainnya</a>
                             `;
                 }
             },
