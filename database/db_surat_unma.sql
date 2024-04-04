@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 31, 2024 at 06:38 AM
+-- Generation Time: Apr 04, 2024 at 05:54 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 
@@ -30,15 +30,16 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `t_kategori_surat` (
   `id_kategori` int(11) NOT NULL,
-  `nama_kategori` varchar(50) NOT NULL
+  `nama_kategori` varchar(50) NOT NULL,
+  `jenis` enum('masuk','keluar','permohonan') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `t_kategori_surat`
 --
 
-INSERT INTO `t_kategori_surat` (`id_kategori`, `nama_kategori`) VALUES
-(1, 'Surat Izin Penelitian');
+INSERT INTO `t_kategori_surat` (`id_kategori`, `nama_kategori`, `jenis`) VALUES
+(1, 'Surat Izin Penelitian', 'permohonan');
 
 -- --------------------------------------------------------
 
@@ -58,15 +59,15 @@ CREATE TABLE `t_sample_surat` (
   `created_by` varchar(50) NOT NULL,
   `updated_by` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL,
-  `update_at` datetime NOT NULL
+  `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `t_sample_surat`
 --
 
-INSERT INTO `t_sample_surat` (`id_sample_surat`, `nama_surat`, `id_kategori`, `kode_fak`, `format_nomor`, `kop_surat`, `template`, `params`, `created_by`, `updated_by`, `created_at`, `update_at`) VALUES
-(1, 'Surat Izin Penelitian', 1, 6, NULL, NULL, '', '', 'admin', 'admin', '2024-03-24 00:00:00', '2024-03-24 00:00:00');
+INSERT INTO `t_sample_surat` (`id_sample_surat`, `nama_surat`, `id_kategori`, `kode_fak`, `format_nomor`, `kop_surat`, `template`, `params`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+(5, '4', 1, 6, '4', '6fed577e31e447112dd81f7b87a463d0.png', '', '#{$1}#Nomor#sesuai_format,{$2}#Hal#nama_surat,{$3}#Lampiran#-,{$4}#Kepada#input_by_TU,{$5}#Waktu Acara#input_by_mhs,', 'admin', 'admin', '2024-04-04 22:37:06', '2024-04-04 22:37:06');
 
 -- --------------------------------------------------------
 
@@ -118,7 +119,8 @@ CREATE TABLE `t_surat_masuk` (
 
 INSERT INTO `t_surat_masuk` (`id_surat_masuk`, `id_kategori`, `tgl_masuk`, `pengirim`, `nomor`, `perihal`, `file_surat`, `lampiran`, `berkas`, `tindakan`, `kode_fak`, `created_at`, `updated_at`, `created_by`, `updated_by`) VALUES
 (4, 1, '2024-03-19', '3', '3', '3', 'mpdf.pdf', 'mpdf1.pdf', 'mpdf2.pdf', '3', '', '2024-03-19 21:25:38', '2024-03-19 21:25:38', 'admin', 'admin'),
-(5, 1, '2024-03-19', '4', '4', '4', 'mpdf3.pdf', 'mpdf4.pdf', 'mpdf5.pdf', '4', '', '2024-03-19 21:28:19', '2024-03-19 21:28:19', 'admin', 'admin');
+(5, 1, '2024-03-19', '4', '4', '4', 'mpdf3.pdf', 'mpdf4.pdf', 'mpdf5.pdf', '4', '', '2024-03-19 21:28:19', '2024-03-19 21:28:19', 'admin', 'admin'),
+(6, 1, '2024-03-31', '5', '5', '5', 'mpdf6.pdf', 'mpdf7.pdf', 'mpdf8.pdf', '5', NULL, '2024-03-31 13:38:26', '2024-03-31 13:38:26', 'admin', 'admin');
 
 -- --------------------------------------------------------
 
@@ -189,7 +191,7 @@ ALTER TABLE `t_kategori_surat`
 -- AUTO_INCREMENT for table `t_sample_surat`
 --
 ALTER TABLE `t_sample_surat`
-  MODIFY `id_sample_surat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_sample_surat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `t_surat_keluar`
@@ -201,7 +203,7 @@ ALTER TABLE `t_surat_keluar`
 -- AUTO_INCREMENT for table `t_surat_masuk`
 --
 ALTER TABLE `t_surat_masuk`
-  MODIFY `id_surat_masuk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_surat_masuk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `t_user`
