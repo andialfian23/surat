@@ -27,14 +27,14 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="id_kategori">Kategori</label>
-                            <div class="input-group">
-                                <select class="form-control form-control-sm" id="jenis">
-                                    <option value="">-- Jenis Surat --</option>
-                                    <option value="keluar">Surat Keluar</option>
-                                    <option value="permohonan">Surat Permohonan</option>
-                                </select>
-                                <select class="form-control form-control-sm" id="id_kategori"></select>
-                            </div>
+
+                            <select class="form-control form-control-sm" id="jenis">
+                                <option value="">-- Jenis Surat --</option>
+                                <option value="keluar">Surat Keluar</option>
+                                <option value="permohonan">Surat Permohonan</option>
+                            </select>
+                            <select class="form-control form-control-sm" id="id_kategori"></select>
+
                             <small id="notif_id_kategori" class="text-danger"></small>
                         </div>
                         <div class="form-group">
@@ -166,7 +166,7 @@
                         <div class="form-group">
                             <label for="template">Template Surat</label>
                             <input type="hidden" id="template">
-                            <trix-editor input="body"></trix-editor>
+                            <trix-editor input="template"></trix-editor>
                         </div>
                         <div class="form-group text-center">
                             <a href="<?= base_url('sample_surat') ?>" class="btn btn-success">Kembali</a>
@@ -207,8 +207,7 @@ $(document).on('change', '#jenis', function() {
 });
 
 $(document).on('click', '#btn-save', function() {
-    let params = '#';
-
+    let params = null;
 
     $('#tbl-params tbody tr').each(function() {
         let id = $(this).find('td:eq(0)').html();
@@ -216,8 +215,6 @@ $(document).on('click', '#btn-save', function() {
         let value = $(this).find('.val_params').val();
         params += id + '#' + label + '#' + value + ',';
     });
-
-
     let dataset = new FormData();
     dataset.append('id_kategori', $('#id_kategori').val());
     dataset.append('nama_surat', $('#nama_surat').val());

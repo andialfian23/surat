@@ -33,6 +33,12 @@ class menu_model extends CI_Model {
 						'menu_text' => 'Surat Acc',
 					],
 				],
+			],[
+				'has-sub' => FALSE,
+				'menu_link' => 'kategori',
+				'menu_text' => 'Kategori',
+				'menu_color' => '',
+				'menu_icon' => 'fas fa-certificate'
 			],
         ];
     }
