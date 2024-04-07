@@ -32,8 +32,10 @@ class sample_surat extends CI_Controller {
     }
 
     public function insert(){
-        
+        $status= 0;
+        $pesan = 'Gagal Menyimpan Sample Surat';
         $kop_surat = null;
+        
         $proses_upload1 = $this->global_model->upload_file('kop_surat','images/kop_surat'); 
         if($proses_upload1){
             $kop_surat = $proses_upload1;
@@ -53,17 +55,26 @@ class sample_surat extends CI_Controller {
             'created_by' => $_SESSION['username'],
             'updated_by' => $_SESSION['username'],
         ];
-        $this->global_model->insert_data($this->table, $values);
-        echo json_encode(1);
+        $insert = $this->global_model->insert_data($this->table, $values);
 
-        // notifikasi(true,'Sample Surat Keluar Berhasil di Buat !!!');
-        // redirect(base_url('sample_surat'));
+        if($insert){
+            $status= 1;
+            $pesan = 'Berhasil Menyimpan Sample Surat';
+        }
+        
+        $output = [
+            'status' => $status,
+            'pesan' => $pesan,
+        ];
+        
+        echo json_encode($output);
     }
 
-    public function edit($id_surat){
+    public function edit($id_sample){
         $data['judul'] = 'Edit Surat';
+        $data['sample'] = $this->smpl_surat->get_data($id_sample)->row();
         $data['kategori'] = $this->db->order_by('nama_kategori','ASC')->get('t_kategori_surat')->result();
-        $data['view'] = 'sample_surat/e_surat';
+        $data['view'] = 'sample_surat/e_sample_surat';
         $this->load->view('index',$data);
     }
 
@@ -84,7 +95,8 @@ class sample_surat extends CI_Controller {
 
     public function detail($id_sample){
         $data['judul'] = 'Detail Sample Surat';
-        $data['view'] = 'sample_surat/detail';
+        $data['sample'] = $this->smpl_surat->get_data($id_sample)->row();
+        $data['view'] = 'sample_surat/detail_sample';
         $this->load->view('index',$data);
     }
 

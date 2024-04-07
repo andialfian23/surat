@@ -55,6 +55,13 @@ class surat_permohonan extends CI_Controller{
         echo json_encode($output);
     }
 
+    public function delete($id_sp){
+        $where = ['id_sp'=>$id_sp];
+        $delete = $this->global_model->delete_data('t_surat_permohonan',$where);
+        notifikasi(true,'Berhasil Menghapus Data');
+        redirect(base_url('surat_permohonan'));
+    }
+
     public function pdf($id_sp){
         $key = $this->s_permohonan->get_surat($id_sp)->row();
         // echo json_encode($key);
@@ -64,9 +71,10 @@ class surat_permohonan extends CI_Controller{
         $value = $key->value_sp;
         $template = $key->template;
 
-        // MERUBAH {$1},{$2} Nomor Surat dan Hal
+        // MERUBAH {$1},{$2},{$3} Nomor Surat dan Hal
         $template = str_replace('{$1}',$key->no_sp,$template);
-        $template = str_replace('{$2}',$key->nama_surat,$template);
+        $template = str_replace('{$2}',$key->no_sp,$template);
+        $template = str_replace('{$3}',$key->nama_surat,$template);
 
         // MENGUBAH PARAMS {$} DENGAN VALUES OTOMATIS
         $params = explode(',',$params);

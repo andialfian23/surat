@@ -77,6 +77,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     <tr>
                                         <td class="text-center">{$1}</td>
                                         <td>
@@ -121,11 +122,25 @@
                                     <tr>
                                         <td class="text-center">{$4}</td>
                                         <td>
-                                            <input type="text" class="lbl_params w-100" Value="Kepada" data-no="4"
+                                            <input type="text" class="lbl_params w-100" value="Tanggal" data-no="4"
                                                 disabled />
                                         </td>
                                         <td>
-                                            <select class="val_params w-100" data-no="4">
+                                            <select class="val_params w-100" data-no="4" disabled>
+                                                <option value="tanggal_surat">Otomastis</option>
+                                                <option value="input_by_TU">Di input TU</option>
+                                            </select>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">{$5}</td>
+                                        <td>
+                                            <input type="text" class="lbl_params w-100" Value="Kepada" data-no="5"
+                                                disabled />
+                                        </td>
+                                        <td>
+                                            <select class="val_params w-100" data-no="5">
                                                 <option value="-">-</option>
                                                 <option value="input_by_TU" selected>Di input TU</option>
                                                 <option value="input_by_mhs">Di input Mahasiswa</option>
@@ -134,12 +149,12 @@
                                         <td></td>
                                     </tr>
                                     <tr data-no="5">
-                                        <td class="text-center">{$5}</td>
+                                        <td class="text-center">{$6}</td>
                                         <td>
-                                            <input type="text" class="lbl_params w-100" data-no="5">
+                                            <input type="text" class="lbl_params w-100" data-no="6">
                                         </td>
                                         <td>
-                                            <select class="val_params w-100" data-no="5">
+                                            <select class="val_params w-100" data-no="6">
                                                 <option value="-">-</option>
                                                 <option value="input_by_mhs" selected>Di input Mahasiswa</option>
                                                 <option value="input_by_TU">Di input TU</option>
