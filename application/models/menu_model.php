@@ -87,7 +87,7 @@ class menu_model extends CI_Model {
 				'menu_icon' => 'fas fa-home'
 			],[
 				'has-sub' => FALSE,
-				'menu_link' => 'surat',
+				'menu_link' => 'surat_permohonan',
 				'menu_text' => 'Pengajuan Surat',
 				'menu_color' => '',
 				'menu_icon' => 'fas fa-mail-bulk'

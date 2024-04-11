@@ -40,6 +40,8 @@ class sample_surat extends CI_Controller {
         if($proses_upload1){
             $kop_surat = $proses_upload1;
         }
+
+        $params = str_replace('null','',$this->input->post('params',TRUE));
         
         $values = [
             'nama_surat' => $this->input->post('nama_surat',TRUE),
@@ -48,7 +50,7 @@ class sample_surat extends CI_Controller {
             'kode_fak' => 6,
             'kop_surat' => $kop_surat,
             'format_nomor' => $this->input->post('format_nomor',TRUE),
-            'params' => $this->input->post('params',TRUE),
+            'params' => $params,
             'template' => $this->input->post('template',TRUE),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
@@ -65,6 +67,7 @@ class sample_surat extends CI_Controller {
         $output = [
             'status' => $status,
             'pesan' => $pesan,
+            'insert' => $insert,
         ];
         
         echo json_encode($output);
@@ -87,6 +90,8 @@ class sample_surat extends CI_Controller {
             notifikasi(true,'Gagal Menggapus sample surat !!!');
         }else{
             $where = ['id_sample_surat'=>$id_surat];
+            $sample = $this->smpl_surat->get_data($id_sample)->row();
+            unlink(FCPATH . 'images/kop_surat/' . $sample->kop_surat);
             $this->global_model->delete_data($this->table,$where);
             notifikasi(true,'Sample Surat Keluar Berhasil di Hapus !!!');
         }

@@ -30,10 +30,10 @@
                     <div class="text-right ml-auto pr-3">
                         <div class="input-group input-group-sm">
 
-                            <?php if($_SESSION['level'] != '3'){ ?>
-                            <a href="<?= base_url('surat_masuk/create') ?>"
+
+                            <a href="<?= base_url('surat_permohonan/create') ?>"
                                 class="btn bg-gradient-primary mr-2 mt-1 btn-sm">Tambah Surat Permohonan</a>
-                            <?php } ?>
+
 
                             <?php if($_SESSION['level'] == 1){ ?>
                             <div class="input-group-prepend mt-1">
@@ -129,10 +129,6 @@ $(function() {
                 d.xBegin = $('#xBegin').val();
                 d.xEnd = $('#xEnd').val();
                 d.fak = $('#fak').val();
-
-                // localStorage.setItem('xBegin', "" + d.xBegin + "");
-                // localStorage.setItem('xEnd', "" + d.xEnd + "");
-                // localStorage.setItem('fak', "" + d.dept + "");
             }
         },
         columns: [{

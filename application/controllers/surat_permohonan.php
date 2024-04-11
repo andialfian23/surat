@@ -9,10 +9,11 @@ class surat_permohonan extends CI_Controller{
             redirect(base_url('auth'));
         }
         
-        if($_SESSION['level'] > 2){
-            redirect(base_url('dashboard'));
-        }
+        // if($_SESSION['level'] > 2){
+        //     redirect(base_url('dashboard'));
+        // }
         $this->load->model('surat_permohonan_model','s_permohonan');
+        $this->load->model('smpl_surat_model','smpl_surat');
     }
 
     public function index(){
@@ -55,6 +56,15 @@ class surat_permohonan extends CI_Controller{
         echo json_encode($output);
     }
 
+    public function create(){
+        $kode_fak=(!empty($_SESSION['kode_fak']))? $_SESSION['kode_fak'] : 0;
+        $data['judul'] = 'Buat Surat Permohonan';
+        $data['fak'] = $this->global_model->fakultas();
+        $data['sample'] = $this->smpl_surat->get_data(null,'permohonan',$kode_fak);
+        $data['view'] = 'surat_permohonan/i_surat_permohonan';
+        $this->load->view('index',$data);
+    }
+
     public function delete($id_sp){
         $where = ['id_sp'=>$id_sp];
         $delete = $this->global_model->delete_data('t_surat_permohonan',$where);
@@ -64,38 +74,42 @@ class surat_permohonan extends CI_Controller{
 
     public function pdf($id_sp){
         $key = $this->s_permohonan->get_surat($id_sp)->row();
-        // echo json_encode($key);
-        // die;
-        
-        $params = $key->params;
-        $value = $key->value_sp;
+        $nomor    = $key->no_sp;
+        $nama_surat = $key->nama_surat;
+        $tanggal  = date('d M Y',strtotime($key->tgl_permohonan));
+        $params   = $key->params;
+        $value    = $key->value_sp;
         $template = $key->template;
-
-        // MERUBAH {$1},{$2},{$3} Nomor Surat dan Hal
-        $template = str_replace('{$1}',$key->no_sp,$template);
-        $template = str_replace('{$2}',$key->no_sp,$template);
-        $template = str_replace('{$3}',$key->nama_surat,$template);
-
-        // MENGUBAH PARAMS {$} DENGAN VALUES OTOMATIS
-        $params = explode(',',$params);
-        // [0] = No $
-        // [1] = Label
-        // [2] = Value
+        
+        // MENGUBAH params no DENGAN VALUES OTOMATIS (selain input by tu & input by mhs)
         $no = 1;
+        $params = explode('|',$params);
         foreach($params as $p){
-            if($p != '' && $no > 2){
+            if($p != ''){
                 $exp_params = explode('#',$p);
+                // [0] = Param No [no]
+                // [1] = Label
+                // [2] = Value
                 if(strpos($template,$exp_params[0]) !== false){
                     if($exp_params[2] != 'input_by_mhs' & $exp_params[2] != 'input_by_tu'){
-                        $template = str_replace($exp_params[0],$exp_params[2],$template);
+                        if($exp_params[2] =='sesuai_format'){
+                            $value_ubah = $nomor;  // merubah [no] sesuai format nomor
+                        } else if($exp_params[2] =='nama_surat'){
+                            $value_ubah = $nama_surat;  // merubah [no] sesuai nama surat
+                        }else if($exp_params[2] =='tanggal_surat'){
+                            $value_ubah = $tanggal;     // merubah [no] sesuai tanggal
+                        }else {
+                            $value_ubah = $exp_params[2];  // merubah params lainnya
+                        }
+                        $template = str_replace($exp_params[0], $value_ubah, $template);
                     }
                 }
             }
             $no++;
         }
 
-        // MENGUBAH {$} DENGAN VALUES YANG DI INPUTKAN USER
-        $value = explode(',',$value);
+        // MENGUBAH [no] DENGAN VALUES YANG DI INPUTKAN USER
+        $value = explode('|',$value);
         foreach($value as $v){
             if($v != ''){
                 $exp_value = explode('#',$v);
@@ -105,11 +119,75 @@ class surat_permohonan extends CI_Controller{
             }
         }
 
-        // echo json_encode($template);
-        // die;
+        $data['judul'] = 'Surat Permohonan Izin Penelitian Tugas Akhir';
         $data['kop_surat'] = $key->kop_surat;
         $data['isi_surat'] = $template;
-        $this->load->view('surat/pdf', $data);
+        $this->load->view('surat_permohonan/pdf', $data);
+    }
+
+    public function get_sample(){
+        $id_sample = $this->input->post('id',TRUE);
+        $kode_fak = (!empty($_SESSION['kode_fak']))? $_SESSION['kode_fak'] : 0;
+        $sample = $this->smpl_surat->get_data($id_sample,null,$kode_fak)->row();
+
+        // INPUT UNTUK MAHASISWA
+        $params =  explode('|',$sample->params);
+        $form_input = null;
+        $no =1;
+        foreach($params as $p){
+            if($p != '' && $no > 2){
+                $exp_params = explode('#',$p);
+                $params_no = str_replace('[','',str_replace(']','',$exp_params[0]));
+                $label = $exp_params[1];
+                $hidden = '';
+                if($exp_params[2] == 'input_by_tu'){
+                    $hidden = ($_SESSION['level']>2) ? 'd-none' : '';
+                }else if($exp_params[2] == 'input_by_mhs'){
+                    $hidden = ($_SESSION['level']>2) ? '' : 'd-none';
+                }else{
+                    $hidden = 'd-none';
+                }
+                $form_input .= '<div class="form-group '.$hidden.'">
+                        <label for="inp_'.$no.'">'.$label.'</label>
+                        <input type="text" class="form-control form-control-sm" data-no="'.$params_no.'" id="inp_'.$no.'" />
+                    </div>'; 
+            }
+            $no++;
+        }
+        
+        echo json_encode($form_input);
+    }
+
+    public function insert(){
+        $status = 0;
+        $pesan = 'Gagal Menyimpan Surat Permohonan';
+
+        $id_sample = $this->input->post('surat',TRUE);
+        $tanggal = $this->input->post('tanggal',TRUE);
+        $value_sp = $this->input->post('value_sp');
+        $value_sp = str_replace('null','',$value_sp);
+        
+        $values = [
+            'id_sample_surat' => $id_sample,
+            'tgl_permohonan'  => $tanggal,
+            'username' => $_SESSION['username'],
+            'no_sp' => null,
+            'value_sp' => $value_sp,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),   
+        ];
+        $insert = $this->global_model->insert_data('t_surat_permohonan',$values);
+
+        if($insert){
+            $status = 1;
+            $pesan = 'Berhasil Menyimpan Surat Permohonan';
+        }
+
+        $output = [
+            'status' => $status,
+            'pesan' => $pesan,
+        ];
+        echo json_encode($output);
     }
 }
 

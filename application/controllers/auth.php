@@ -35,6 +35,7 @@ class auth extends CI_Controller {
                 $url = 'dashboard';
                 $_SESSION['username'] = $username;
                 $_SESSION['level'] = $user->level;
+                $_SESSION['kode_fak'] = $user->kode_fak;
                
                 $output = [
                     'status' => 1,

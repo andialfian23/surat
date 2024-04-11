@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 04, 2024 at 05:54 PM
+-- Generation Time: Apr 11, 2024 at 06:51 AM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 
@@ -39,7 +39,7 @@ CREATE TABLE `t_kategori_surat` (
 --
 
 INSERT INTO `t_kategori_surat` (`id_kategori`, `nama_kategori`, `jenis`) VALUES
-(1, 'Surat Izin Penelitian', 'permohonan');
+(1, 'Permohonan Izin Penelitian Tugas Akhir', 'permohonan');
 
 -- --------------------------------------------------------
 
@@ -67,7 +67,7 @@ CREATE TABLE `t_sample_surat` (
 --
 
 INSERT INTO `t_sample_surat` (`id_sample_surat`, `nama_surat`, `id_kategori`, `kode_fak`, `format_nomor`, `kop_surat`, `template`, `params`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(5, '4', 1, 6, '4', '6fed577e31e447112dd81f7b87a463d0.png', '', '#{$1}#Nomor#sesuai_format,{$2}#Hal#nama_surat,{$3}#Lampiran#-,{$4}#Kepada#input_by_TU,{$5}#Waktu Acara#input_by_mhs,', 'admin', 'admin', '2024-04-04 22:37:06', '2024-04-04 22:37:06');
+(1, 'Permohonan Izin Penelitian Tugas Akhir', 1, 6, '6/FT/-UNMA/I/2023', 'dc0762e0cb0b628b8cf6b14f527504aa.png', '<div>Majalengka, [4]<br>Nomor     : [1]<br>Lampiran  : [3]<br>Hal            : [2]<br><br>Kepada Yth.<br><strong>[5]<br></strong>di<br>      <strong>Tempat<br></strong><br>Dengan Hormat,<br>Berkenan dengan kegiatan Tugas Akhir salah satu mahasiswa kami dengan Judul : \" [6] \", oleh karena itu mohon kiranya dapat mengizinkan yang bersangkutan untuk keperluan penelitian dan pengambilan data di [10] guna menyelesaikan Tugas Akhir, Adapun mahasiswa yang akan melakukan penelitian yaitu :<br>        Nama                      : [7]<br>        NPM                        : [8]<br>        Program Studi         : [9]<br>        Waktu Pelaksanaan : [11]<br>         Demikian surat ini kami sampaikan, Atas kebijaksanaan Bapak/Ibu pimpinan serta kerja sama yang baik, kami ucapkan terima kasih.</div>', '[1]#Nomor#sesuai_format|[2]#Hal#nama_surat|[3]#Lampiran#-|[4]#Tanggal#tanggal_surat|[5]#Kepada#input_by_mhs|[6]#Judul Tugas Akhir#input_by_mhs|[7]#Nama Mahasiswa#input_by_mhs|[8]#NPM#input_by_mhs|[9]#Progam Studi#input_by_mhs|[10]#Lokasi Penelitian#input_by_mhs|[11]#Waktu Pelaksanaan#input_by_mhs|', 'tatausaha', 'tatausaha', '2024-04-11 09:39:26', '2024-04-11 09:39:26');
 
 -- --------------------------------------------------------
 
@@ -77,7 +77,7 @@ INSERT INTO `t_sample_surat` (`id_sample_surat`, `nama_surat`, `id_kategori`, `k
 
 CREATE TABLE `t_surat_keluar` (
   `id_surat_keluar` int(11) NOT NULL,
-  `id_smpl_surat` int(11) NOT NULL,
+  `id_sample_surat` int(11) NOT NULL,
   `no_surat_keluar` varchar(50) NOT NULL,
   `isi_surat` text NOT NULL,
   `dokumen` varchar(255) NOT NULL,
@@ -125,6 +125,24 @@ INSERT INTO `t_surat_masuk` (`id_surat_masuk`, `id_kategori`, `tgl_masuk`, `peng
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `t_surat_permohonan`
+--
+
+CREATE TABLE `t_surat_permohonan` (
+  `id_sp` int(11) NOT NULL,
+  `id_sample_surat` int(11) NOT NULL,
+  `tgl_permohonan` date NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `no_sp` varchar(50) DEFAULT NULL,
+  `value_sp` text DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `approve1` int(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `t_user`
 --
 
@@ -132,16 +150,18 @@ CREATE TABLE `t_user` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `level` int(11) NOT NULL
+  `level` int(11) NOT NULL,
+  `kode_fak` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `t_user`
 --
 
-INSERT INTO `t_user` (`id`, `username`, `password`, `level`) VALUES
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 1),
-(2, 'tatausaha', '82849c85acf1f4e6e4eec748f0aeddf4', 2);
+INSERT INTO `t_user` (`id`, `username`, `password`, `level`, `kode_fak`) VALUES
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 1, 0),
+(2, 'tatausaha', '82849c85acf1f4e6e4eec748f0aeddf4', 2, 6),
+(3, '20.14.1.0011', '9ca22081408ff00fab842543c4e1c3f1', 3, 6);
 
 --
 -- Indexes for dumped tables
@@ -163,13 +183,23 @@ ALTER TABLE `t_sample_surat`
 -- Indexes for table `t_surat_keluar`
 --
 ALTER TABLE `t_surat_keluar`
-  ADD PRIMARY KEY (`id_surat_keluar`);
+  ADD PRIMARY KEY (`id_surat_keluar`),
+  ADD KEY `id_smpl_surat` (`id_sample_surat`),
+  ADD KEY `username` (`username`);
 
 --
 -- Indexes for table `t_surat_masuk`
 --
 ALTER TABLE `t_surat_masuk`
   ADD PRIMARY KEY (`id_surat_masuk`);
+
+--
+-- Indexes for table `t_surat_permohonan`
+--
+ALTER TABLE `t_surat_permohonan`
+  ADD PRIMARY KEY (`id_sp`),
+  ADD KEY `id_sample` (`id_sample_surat`),
+  ADD KEY `username` (`username`);
 
 --
 -- Indexes for table `t_user`
@@ -185,13 +215,13 @@ ALTER TABLE `t_user`
 -- AUTO_INCREMENT for table `t_kategori_surat`
 --
 ALTER TABLE `t_kategori_surat`
-  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `t_sample_surat`
 --
 ALTER TABLE `t_sample_surat`
-  MODIFY `id_sample_surat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_sample_surat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `t_surat_keluar`
@@ -206,10 +236,16 @@ ALTER TABLE `t_surat_masuk`
   MODIFY `id_surat_masuk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `t_surat_permohonan`
+--
+ALTER TABLE `t_surat_permohonan`
+  MODIFY `id_sp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `t_user`
 --
 ALTER TABLE `t_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

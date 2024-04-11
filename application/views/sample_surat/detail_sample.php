@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <label for="format_nomor">Format Nomor</label>
                             <div class="" id="format_nomor">
-                                <?= $sample->nama_surat ?>
+                                <?= $sample->format_nomor ?>
                             </div>
                         </div>
                         <div class="form-group">
@@ -75,7 +75,7 @@
                                 </thead>
                                 <tbody>
                                     <?php 
-                                        $params = explode(',',$sample->params);
+                                        $params = explode('|',$sample->params);
                                         foreach($params as $p){
                                             if($p !=''){
                                             $key = explode('#',$p);
@@ -83,7 +83,9 @@
                                                 $value = 'Sesuai Format';
                                             }else  if($key[2]=='nama_surat'){
                                                 $value = 'Nama Surat';
-                                            }else  if($key[2]=='input_by_tu'){
+                                            }else  if($key[2]=='tanggal_surat'){
+                                                $value = 'Tanggal Surat';
+                                            }else  if($key[2]=='input_by_TU'){
                                                 $value = 'Input Oleh Tata Usaha';
                                             }else  if($key[2]=='input_by_mhs'){
                                                 $value = 'Input Oleh Mahasiswa';
@@ -92,7 +94,7 @@
                                             }
                                     ?>
                                     <tr>
-                                        <td><?= $key[0] ?></td>
+                                        <td class="text-center"><?= $key[0] ?></td>
                                         <td><?= $key[1] ?></td>
                                         <td><?= $value ?></td>
                                     </tr>
