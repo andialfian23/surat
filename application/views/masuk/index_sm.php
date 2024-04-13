@@ -25,16 +25,14 @@
                 <div class="row d-flex justify-content-between">
 
                     <div class="col-lg-2 col-md-6 col-sm-12 mt-1">
-                        <span class="mx-2">Surat Permohonan</span>
+                        <span class="mx-2">Surat Masuk</span>
                     </div>
                     <div class="text-right ml-auto pr-3">
                         <div class="input-group input-group-sm">
-
-
-                            <a href="<?= base_url('surat_permohonan/create') ?>"
-                                class="btn bg-gradient-primary mr-2 mt-1 btn-sm">Tambah Surat Permohonan</a>
-
-
+                            <?php if($_SESSION['level'] != '3'){ ?>
+                            <a href="<?= base_url('Masuk/create') ?>"
+                                class="btn bg-gradient-primary mr-2 mt-1 btn-sm">Tambah Surat Masuk</a>
+                            <?php } ?>
                             <?php if($_SESSION['level'] == 1){ ?>
                             <div class="input-group-prepend mt-1">
                                 <span class="input-group-text border-warning bg-dark">Fakultas</span>
@@ -64,14 +62,16 @@
             </div>
             <div class="card-body px-3 py-3 pb-2">
                 <div class="table-responsive p-1">
-                    <table class="table table-bordered table-striped table-hover table-sm" id="tbl-surat-permohonan"
+                    <table class="table table-bordered table-striped table-hover table-sm" id="tbl-surat-masuk"
                         width="100%">
                         <thead class="bg-gradient-dark text-white">
                             <tr>
                                 <th>Tanggal</th>
-                                <th>Nomor Surat</th>
-                                <th>Pembuat</th>
-                                <th>Surat Permohonan</th>
+                                <th>Pengirim</th>
+                                <th>Nomor</th>
+                                <th>Perihal</th>
+                                <th>Tindakan</th>
+                                <th>File</th>
                                 <th>--</th>
                             </tr>
                         </thead>
@@ -85,9 +85,7 @@
 
 <script>
 $(function() {
-    let localStorage = window.localStorage;
-
-    let table = $('#tbl-surat-permohonan').DataTable({
+    let table = $('#tbl-surat-masuk').DataTable({
         dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
@@ -107,7 +105,7 @@ $(function() {
                 className: 'btn bg-gradient-blue btn-sm',
                 action: function(e, dt, node, config) {
                     setTimeout(function() {
-                        window.open("<?= base_url('surat_permohonan/print') ?>",
+                        window.open("<?= base_url('Masuk/print') ?>",
                             '_blank');
                     }, 1000);
                 }
@@ -120,10 +118,10 @@ $(function() {
         processing: true,
         "columnDefs": [{
             "orderable": false,
-            "targets": [4]
+            "targets": [5, 6]
         }],
         ajax: {
-            url: "<?= base_url('surat_permohonan/show') ?>",
+            url: "<?= base_url('Masuk/show') ?>",
             type: "POST",
             data: function(d) {
                 d.xBegin = $('#xBegin').val();
@@ -132,28 +130,41 @@ $(function() {
             }
         },
         columns: [{
-            data: 'tgl_permohonan',
-        }, {
-            data: 'no_sp',
-        }, {
-            data: 'pemohon',
-        }, {
-            data: 'nama_surat',
-        }, {
-            data: 'id_sp',
-            render: function(data, type, row, meta) {
-                return `<a href="<?= base_url('surat_permohonan/pdf/') ?>` + row.id_sp + `" 
-                            class="badge bg-warning p-1" target="_blank">
-                                <i class="fas fa-file-pdf"></i> Pdf</a>
-                        <a href="<?= base_url('surat_permohonan/edit/') ?>` + row.id_sp + `" 
+                data: 'tgl_masuk',
+            }, {
+                data: 'pengirim',
+            }, {
+                data: 'nomor',
+            }, {
+                data: 'perihal',
+            }, {
+                data: 'tindakan',
+            },
+            {
+                data: 'file_surat',
+                render: function(data, type, row, meta) {
+                    return `<a target="_blank" href="<?= base_url('dokumen/surat_masuk/') ?>` +
+                        row.file_surat + `" class="badge badge-warning"><i class="fas fa-envelope"></i> Surat</a>
+                            <a target="_blank" href="<?= base_url('dokumen/surat_masuk/') ?>` + row
+                        .file_surat + `" class="badge badge-dark"><i class="fas fa-file-alt"></i> Lampiran</a>
+                            <a target="_blank" href="<?= base_url('dokumen/surat_masuk/') ?>` + row.file_surat + `" class="badge badge-success"><i class="fas fa-file-alt"></i> Berkas Lainnya</a>
+                            `;
+                }
+            },
+            {
+                data: 'id_surat_masuk',
+                render: function(data, type, row, meta) {
+                    return `<a href="<?= base_url('Masuk/edit/') ?>` + row
+                        .id_surat_masuk + `" 
                             class="badge badge-info p-1"><i class="fas fa-edit"></i> Edit</a>
-                        <a href="<?= base_url('surat_permohonan/delete/') ?>` + row.id_sp + `"
+                        <a href="<?= base_url('Masuk/delete/') ?>` + row.id_surat_masuk + `"
                             class="badge badge-danger p-1"
                             onclick="return confirm('Apakah anda yakin akan menghapus data ini?')"><i
                             class="fas fa-trash-alt"></i> Hapus</a>`;
 
+                },
             },
-        }, ],
+        ],
     });
 
     $(document).on('click', '#cari', function() {

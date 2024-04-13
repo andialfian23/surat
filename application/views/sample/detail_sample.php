@@ -17,14 +17,11 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card shadow">
-            <div class="card-header">
-                Detail Sample Surat
-            </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <a href="<?= base_url('sample_surat') ?>" class="btn btn-success">Kembali</a>
+                            <a href="<?= base_url('sample') ?>" class="btn btn-success">Kembali</a>
                         </div>
                         <div class="form-group">
                             <label for="id_kategori">Jenis Surat</label>

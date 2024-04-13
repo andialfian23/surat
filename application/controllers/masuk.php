@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class surat_masuk extends CI_Controller {
+class masuk extends CI_Controller {
 
     var $table = 't_surat_masuk';
     
@@ -18,8 +18,8 @@ class surat_masuk extends CI_Controller {
     }
 
     public function index(){
-        $data['judul'] = 'Data Surat Masuk';
-        $data['view'] = 'surat_masuk/index_surat_masuk';
+        $data['judul'] = 'Daftar Surat Masuk';
+        $data['view'] = 'masuk/index_sm';
         $data['fak'] = $this->global_model->fakultas();
         $this->load->view('index',$data);
     }
@@ -34,9 +34,9 @@ class surat_masuk extends CI_Controller {
         $this->form_validation->set_rules('perihal', 'Perihal', 'trim|required', $notif);
         
         if ($this->form_validation->run() == FALSE){
-            $data['judul'] = 'Tambah Surat Masuk';
+            $data['judul'] = 'Buat Surat Masuk';
             $data['kategori'] = $this->db->order_by('nama_kategori','ASC')->get('t_kategori_surat')->result();
-            $data['view'] = 'surat_masuk/i_surat_masuk';
+            $data['view'] = 'masuk/tambah_sm';
             $this->load->view('index',$data);
         }else{
             $this->insert();
@@ -53,7 +53,7 @@ class surat_masuk extends CI_Controller {
             $file_surat = $proses_upload1;
         }else{
             notifikasi(false, $this->upload->display_errors());
-            redirect(base_url('surat_masuk/create'));
+            redirect(base_url('masuk/create'));
         }
 
         $proses_upload2 = $this->global_model->upload_file('lampiran','dokumen/lampiran_surat_masuk'); 
@@ -61,7 +61,7 @@ class surat_masuk extends CI_Controller {
             $lampiran = $proses_upload2;
         }else{
             notifikasi(false, $this->upload->display_errors());
-            redirect(base_url('surat_masuk/create'));
+            redirect(base_url('masuk/create'));
         }
         
         $proses_upload3 = $this->global_model->upload_file('berkas','dokumen/berkas_surat_masuk'); 
@@ -69,7 +69,7 @@ class surat_masuk extends CI_Controller {
             $berkas = $proses_upload3;
         }else{
             notifikasi(false, $this->upload->display_errors());
-            redirect(base_url('surat_masuk/create'));
+            redirect(base_url('masuk/create'));
         }
 
 
@@ -90,13 +90,13 @@ class surat_masuk extends CI_Controller {
         ];
         $this->global_model->insert_data($this->table,$values);
         notifikasi(true,'Surat Masuk Berhasil di Ubah !!!');
-        redirect(base_url('surat_masuk'));
+        redirect(base_url('masuk'));
     }
 
     public function edit($id_surat=null){
         if($id_surat==null){
             notifikasi(true,'Gagal Menggapus surat masuk !!!');
-            redirect(base_url('surat_masuk'));
+            redirect(base_url('masuk'));
         }
         $notif = [
             'required'=> "{field} Harus di isi",
@@ -108,7 +108,7 @@ class surat_masuk extends CI_Controller {
         
         if ($this->form_validation->run() == FALSE){
             $data['judul'] = 'Edit Surat Masuk';
-            $data['view'] = 'surat_masuk/e_surat_masuk';
+            $data['view'] = 'masuk/edit_sm';
             $data['kategori'] = $this->db->order_by('nama_kategori','ASC')->get('t_kategori_surat')->result();
             $data['surat'] = $this->surat_masuk->get_surat_masuk(['id_surat_masuk'=>$id_surat])->row();
             $this->load->view('index',$data);
@@ -130,7 +130,7 @@ class surat_masuk extends CI_Controller {
                 $file_surat = $proses_upload1;
             }else{
                 notifikasi(false, $this->upload->display_errors());
-                redirect(base_url('surat_masuk/edit/'.$id_surat));
+                redirect(base_url('masuk/edit/'.$id_surat));
             }
 
             $proses_upload2 = $this->global_model->upload_file('lampiran','dokumen/lampiran_surat_masuk'); 
@@ -138,7 +138,7 @@ class surat_masuk extends CI_Controller {
                 $lampiran = $proses_upload2;
             }else{
                 notifikasi(false, $this->upload->display_errors());
-                redirect(base_url('surat_masuk/edit/'.$id_surat));
+                redirect(base_url('masuk/edit/'.$id_surat));
             }
             
             $proses_upload3 = $this->global_model->upload_file('berkas','dokumen/berkas_surat_masuk'); 
@@ -146,7 +146,7 @@ class surat_masuk extends CI_Controller {
                 $berkas = $proses_upload3;
             }else{
                 notifikasi(false, $this->upload->display_errors());
-                redirect(base_url('surat_masuk/edit/'.$id_surat));
+                redirect(base_url('masuk/edit/'.$id_surat));
             }
             
             $where = ['id_surat_masuk'=>$id_surat];
@@ -166,7 +166,7 @@ class surat_masuk extends CI_Controller {
             $this->global_model->update_data($this->table,$set,$where);
             notifikasi(true,'Surat Masuk Berhasil di Ubah !!!');
         }
-        redirect(base_url('surat_masuk'));
+        redirect(base_url('masuk'));
     }
 
     public function delete($id_surat=null){
@@ -177,7 +177,7 @@ class surat_masuk extends CI_Controller {
             $this->global_model->delete_data($this->table,$where);
             notifikasi(true,'Surat Masuk Berhasil di Hapus !!!');
         }
-        redirect(base_url('surat_masuk'));
+        redirect(base_url('masuk'));
     }
 
     public function show(){

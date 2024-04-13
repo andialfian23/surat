@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class surat_keluar extends CI_Controller {
+class keluar extends CI_Controller {
 
     var $table = 't_surat_keluar';
     
@@ -19,13 +19,13 @@ class surat_keluar extends CI_Controller {
 
     public function index(){
         $data['judul'] = 'Data Surat';
-        $data['view'] = 'surat/index_surat';
+        $data['view'] = 'keluar/index_sk';
         $this->load->view('index',$data);
     }
 
     public function create(){
-        $data['judul'] = 'Tambah Surat';
-        $data['view'] = 'surat/i_surat';
+        $data['judul'] = 'Buat Surat Keluar';
+        $data['view'] = 'keluar/tambah_sk';
         $this->load->view('index',$data);
     }
 
@@ -34,8 +34,8 @@ class surat_keluar extends CI_Controller {
     }
 
     public function edit($id_surat){
-        $data['judul'] = 'Edit Surat';
-        $data['view'] = 'surat/e_surat';
+        $data['judul'] = 'Edit Surat Keluar';
+        $data['view'] = 'keluar/edit_sk';
         $this->load->view('index',$data);
     }
 

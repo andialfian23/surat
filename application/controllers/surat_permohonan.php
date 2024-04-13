@@ -8,10 +8,6 @@ class surat_permohonan extends CI_Controller{
         if(!isset($_SESSION['level'])){
             redirect(base_url('auth'));
         }
-        
-        // if($_SESSION['level'] > 2){
-        //     redirect(base_url('dashboard'));
-        // }
         $this->load->model('surat_permohonan_model','s_permohonan');
         $this->load->model('smpl_surat_model','smpl_surat');
     }

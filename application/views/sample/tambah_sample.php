@@ -19,9 +19,6 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card shadow">
-            <div class="card-header">
-                Edit Sample Surat
-            </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-6">
@@ -39,29 +36,24 @@
                         </div>
                         <div class="form-group">
                             <label for="nama_surat">Nama Surat</label>
-                            <input type="text" class="form-control form-control-sm" id="nama_surat"
-                                value="<?= $sample->nama_surat ?>">
+                            <input type="text" class="form-control form-control-sm" id="nama_surat">
                             <small id="notif_nama_surat" class="text-danger"></small>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="format_nomor">Format Nomor</label>
-                            <input type="text" class="form-control form-control-sm" id="format_nomor"
-                                value="<?= $sample->format_nomor ?>">
+                            <input type="text" class="form-control form-control-sm" id="format_nomor">
                             <small id="notif_format_nomor" class="text-danger"></small>
                         </div>
                         <div class="form-group">
                             <label for="kop_surat">Kop Surat</label>
-                            <div class="custom-file" id="kop_surat">
+                            <div class="custom-file">
                                 <input type="file" class="custom-file-input custom" id="exampleInputFile1"
                                     id="kop_surat" />
                                 <label class="custom-file-label" for="exampleInputFile1">
                                     Berupa Gambar JPG/PNG
                                 </label>
-                            </div>
-                            <div class="">
-                                <img src="<?= base_url('images/kop_surat/'.$sample->kop_surat) ?>" alt="" width="100%">
                             </div>
                             <small id="notif_kop_surat" class="text-danger"></small>
                         </div>
@@ -82,8 +74,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     <tr>
-                                        <td class="text-center">{$1}</td>
+                                        <td class="text-center">[1]</td>
                                         <td>
                                             <input type="text" class="lbl_params w-100" value="Nomor" data-no="1"
                                                 disabled />
@@ -96,7 +89,7 @@
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center">{$2}</td>
+                                        <td class="text-center">[2]</td>
                                         <td>
                                             <input type="text" class="lbl_params w-100" value="Hal" data-no="2"
                                                 disabled />
@@ -109,7 +102,7 @@
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center">{$3}</td>
+                                        <td class="text-center">[3]</td>
                                         <td>
                                             <input type="text" class="lbl_params w-100" value="Lampiran" data-no="3"
                                                 disabled />
@@ -124,7 +117,7 @@
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center">{$4}</td>
+                                        <td class="text-center">[4]</td>
                                         <td>
                                             <input type="text" class="lbl_params w-100" value="Tanggal" data-no="4"
                                                 disabled />
@@ -138,7 +131,7 @@
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center">{$5}</td>
+                                        <td class="text-center">[5]</td>
                                         <td>
                                             <input type="text" class="lbl_params w-100" Value="Kepada" data-no="5"
                                                 disabled />
@@ -153,7 +146,7 @@
                                         <td></td>
                                     </tr>
                                     <tr data-no="5">
-                                        <td class="text-center">{$6}</td>
+                                        <td class="text-center">[6]</td>
                                         <td>
                                             <input type="text" class="lbl_params w-100" data-no="6">
                                         </td>
@@ -188,7 +181,7 @@
                             <trix-editor input="template"></trix-editor>
                         </div>
                         <div class="form-group text-center">
-                            <a href="<?= base_url('sample_surat') ?>" class="btn btn-success">Kembali</a>
+                            <a href="<?= base_url('sample') ?>" class="btn btn-success">Kembali</a>
                             <input type="reset" class="btn btn-danger" value="Reset" />
                             <button type="submit" class="btn btn-primary" id="btn-save">Simpan</button>
                         </div>
@@ -208,7 +201,7 @@ $(function() {
 
 $(document).on('change', '#jenis', function() {
     $.ajax({
-        url: '<?= base_url('sample_surat/kategori') ?>',
+        url: '<?= base_url('sample/kategori') ?>',
         type: 'POST',
         data: {
             jenis: $(this).val(),
@@ -232,7 +225,7 @@ $(document).on('click', '#btn-save', function() {
         let id = $(this).find('td:eq(0)').html();
         let label = $(this).find('.lbl_params').val();
         let value = $(this).find('.val_params').val();
-        params += id + '#' + label + '#' + value + ',';
+        params += id + '#' + label + '#' + value + '|';
     });
     let dataset = new FormData();
     dataset.append('id_kategori', $('#id_kategori').val());
@@ -243,7 +236,7 @@ $(document).on('click', '#btn-save', function() {
     dataset.append('template', $('#template').val());
 
     $.ajax({
-        url: '<?= base_url('sample_surat/insert') ?>',
+        url: '<?= base_url('sample/insert') ?>',
         type: 'POST',
         data: dataset,
         contentType: false,
@@ -252,6 +245,9 @@ $(document).on('click', '#btn-save', function() {
         success: function(res) {
             if (res.status == 1) {
                 toastr.success('Berhasil Menyimpan Data');
+                setTimeout(function() {
+                    window.location.replace("<?= base_url('sample') ?>");
+                }, 1000);
             } else {
                 toastr.success('Gagal Menyimpan Data');
             }
@@ -266,7 +262,7 @@ $(document).on('click', '#btn-add-params', function() {
 
     tbody.append(`
     <tr data-no="` + last_no + `">
-        <td class="text-center">{$` + last_no + `}</td>
+        <td class="text-center">[` + last_no + `]</td>
         <td>
             <input type="text" class="lbl_params w-100" data-no="` + last_no + `">
         </td>

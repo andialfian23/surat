@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class sample_surat extends CI_Controller {
+class sample extends CI_Controller {
 
     var $table = 't_sample_surat';
     
@@ -18,16 +18,16 @@ class sample_surat extends CI_Controller {
     }
 
     public function index(){
-        $data['judul'] = 'Data Surat';
+        $data['judul'] = 'Daftar Sample Surat';
         $data['sample_surat'] = $this->smpl_surat->get_data()->result();
-        $data['view'] = 'sample_surat/index_sample_surat';
+        $data['view'] = 'sample/index_sample';
         $this->load->view('index',$data);
     }
 
     public function create(){
-        $data['judul'] = 'Tambah Sample Surat';
+        $data['judul'] = 'Buat Sample Surat';
         $data['kategori'] = $this->db->order_by('nama_kategori','ASC')->get('t_kategori_surat')->result();
-        $data['view'] = 'sample_surat/i_sample_surat';
+        $data['view'] = 'sample/tambah_sample';
         $this->load->view('index',$data);
     }
 
@@ -74,10 +74,10 @@ class sample_surat extends CI_Controller {
     }
 
     public function edit($id_sample){
-        $data['judul'] = 'Edit Surat';
+        $data['judul'] = 'Edit Sample Surat';
         $data['sample'] = $this->smpl_surat->get_data($id_sample)->row();
         $data['kategori'] = $this->db->order_by('nama_kategori','ASC')->get('t_kategori_surat')->result();
-        $data['view'] = 'sample_surat/e_sample_surat';
+        $data['view'] = 'sample/edit_sample';
         $this->load->view('index',$data);
     }
 
@@ -95,13 +95,13 @@ class sample_surat extends CI_Controller {
             $this->global_model->delete_data($this->table,$where);
             notifikasi(true,'Sample Surat Keluar Berhasil di Hapus !!!');
         }
-        redirect(base_url('sample_surat'));
+        redirect(base_url('sample'));
     }
 
     public function detail($id_sample){
         $data['judul'] = 'Detail Sample Surat';
         $data['sample'] = $this->smpl_surat->get_data($id_sample)->row();
-        $data['view'] = 'sample_surat/detail_sample';
+        $data['view'] = 'sample/detail_sample';
         $this->load->view('index',$data);
     }
 

@@ -1,11 +1,8 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card shadow">
-            <div class="card-header">
-                Tambah Surat Masuk
-            </div>
             <div class="card-body">
-                <form action="<?= base_url('surat_masuk/create') ?>" method="POST" enctype="multipart/form-data">
+                <form action="<?= base_url('Masuk/create') ?>" method="POST" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
@@ -77,7 +74,7 @@
                                 <small id="notif_berkas" class="text-danger"></small>
                             </div>
                             <div class="form-group text-center">
-                                <a href="<?= base_url('surat_masuk') ?>" class="btn btn-success">Kembali</a>
+                                <a href="<?= base_url('Masuk') ?>" class="btn btn-success">Kembali</a>
                                 <input type="reset" class="btn btn-danger" value="Reset" />
                                 <button type="submit" class="btn btn-primary">Simpan</button>
                             </div>
