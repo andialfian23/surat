@@ -1,21 +1,21 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class surat_permohonan extends CI_Controller{
+class permohonan extends CI_Controller{
     
     public function __construct(){
         parent::__construct();
         if(!isset($_SESSION['level'])){
             redirect(base_url('auth'));
         }
-        $this->load->model('surat_permohonan_model','s_permohonan');
+        $this->load->model('surat_permohonan_model','permohonan');
         $this->load->model('smpl_surat_model','smpl_surat');
     }
 
     public function index(){
-        $data['judul'] = 'Data Surat Permohonan';
+        $data['judul'] = 'Daftar Surat Permohonan';
         $data['fak'] = $this->global_model->fakultas();
-        $data['view'] = 'surat_permohonan/index_surat_permohonan';
+        $data['view'] = 'permohonan/index_sp';
         $this->load->view('index',$data);
     }
 
@@ -27,7 +27,7 @@ class surat_permohonan extends CI_Controller{
         
         $column_order = array('tgl_permohonan', 'no_sp', 'a.username', 'nama_surat');
                     
-        $query = $this->s_permohonan->get_datatables($column_order, $xBegin, $xEnd, $fak);
+        $query = $this->permohonan->get_datatables($column_order, $xBegin, $xEnd, $fak);
         
         $data   = array();
         foreach ($query->result() as $key) {
@@ -45,7 +45,7 @@ class surat_permohonan extends CI_Controller{
         $output = array(
             "draw"              => $_POST['draw'],
             "recordsFiltered"   => $query->num_rows(),
-            "recordsTotal"      => $this->s_permohonan->total_entri($xBegin, $xEnd),
+            "recordsTotal"      => $this->permohonan->total_entri($xBegin, $xEnd),
             "data"              => $data,
         );
 
@@ -57,19 +57,83 @@ class surat_permohonan extends CI_Controller{
         $data['judul'] = 'Buat Surat Permohonan';
         $data['fak'] = $this->global_model->fakultas();
         $data['sample'] = $this->smpl_surat->get_data(null,'permohonan',$kode_fak);
-        $data['view'] = 'surat_permohonan/i_surat_permohonan';
+        $data['view'] = 'permohonan/tambah_sp';
         $this->load->view('index',$data);
+    }
+
+    public function insert(){
+        $status = 0;
+        $pesan = 'Gagal Menyimpan Surat Permohonan';
+
+        $id_sample = $this->input->post('surat',TRUE);
+        $tanggal = $this->input->post('tanggal',TRUE);
+        $value_sp = $this->input->post('value_sp');
+        $value_sp = str_replace('null','',$value_sp);
+        
+        $values = [
+            'id_sample_surat' => $id_sample,
+            'tgl_permohonan'  => $tanggal,
+            'username' => $_SESSION['username'],
+            'no_sp' => null,
+            'value_sp' => $value_sp,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),   
+        ];
+        $insert = $this->global_model->insert_data('t_surat_permohonan',$values);
+
+        if($insert){
+            $status = 1;
+            $pesan = 'Berhasil Menyimpan Surat Permohonan';
+        }
+
+        $output = [
+            'status' => $status,
+            'pesan' => $pesan,
+        ];
+        echo json_encode($output);
     }
 
     public function delete($id_sp){
         $where = ['id_sp'=>$id_sp];
         $delete = $this->global_model->delete_data('t_surat_permohonan',$where);
-        notifikasi(true,'Berhasil Menghapus Data');
-        redirect(base_url('surat_permohonan'));
+        notifikasi(true,'Berhasil Menghapus Surat Permohonan');
+        redirect(base_url('permohonan'));
     }
 
+    public function get_sample(){
+        $id_sample = $this->input->post('id',TRUE);
+        $kode_fak = (!empty($_SESSION['kode_fak']))? $_SESSION['kode_fak'] : 0;
+        $sample = $this->smpl_surat->get_data($id_sample,null,$kode_fak)->row();
+
+        $params =  explode('|',$sample->params);
+        $form_input = null;
+        $no =1;
+        foreach($params as $p){
+            if($p != '' && $no > 2){
+                $exp_params = explode('#',$p);
+                $params_no = str_replace('[','',str_replace(']','',$exp_params[0]));
+                $label = $exp_params[1];
+                $hidden = '';
+                if($exp_params[2] == 'input_by_tu'){
+                    $hidden = ($_SESSION['level']>2) ? 'd-none' : '';
+                }else if($exp_params[2] == 'input_by_mhs'){
+                    $hidden = ($_SESSION['level']>2) ? '' : 'd-none';
+                }else{
+                    $hidden = 'd-none';
+                }
+                $form_input .= '<div class="form-group '.$hidden.'">
+                        <label for="inp_'.$no.'">'.$label.'</label>
+                        <input type="text" class="form-control form-control-sm" data-no="'.$params_no.'" id="inp_'.$no.'" />
+                    </div>'; 
+            }
+            $no++;
+        }
+        
+        echo json_encode($form_input);
+    }
+    
     public function pdf($id_sp){
-        $key = $this->s_permohonan->get_surat($id_sp)->row();
+        $key = $this->permohonan->get_surat($id_sp)->row();
         $nomor    = $key->no_sp;
         $nama_surat = $key->nama_surat;
         $tanggal  = date('d M Y',strtotime($key->tgl_permohonan));
@@ -115,75 +179,10 @@ class surat_permohonan extends CI_Controller{
             }
         }
 
-        $data['judul'] = 'Surat Permohonan Izin Penelitian Tugas Akhir';
-        $data['kop_surat'] = $key->kop_surat;
-        $data['isi_surat'] = $template;
-        $this->load->view('surat_permohonan/pdf', $data);
-    }
-
-    public function get_sample(){
-        $id_sample = $this->input->post('id',TRUE);
-        $kode_fak = (!empty($_SESSION['kode_fak']))? $_SESSION['kode_fak'] : 0;
-        $sample = $this->smpl_surat->get_data($id_sample,null,$kode_fak)->row();
-
-        // INPUT UNTUK MAHASISWA
-        $params =  explode('|',$sample->params);
-        $form_input = null;
-        $no =1;
-        foreach($params as $p){
-            if($p != '' && $no > 2){
-                $exp_params = explode('#',$p);
-                $params_no = str_replace('[','',str_replace(']','',$exp_params[0]));
-                $label = $exp_params[1];
-                $hidden = '';
-                if($exp_params[2] == 'input_by_tu'){
-                    $hidden = ($_SESSION['level']>2) ? 'd-none' : '';
-                }else if($exp_params[2] == 'input_by_mhs'){
-                    $hidden = ($_SESSION['level']>2) ? '' : 'd-none';
-                }else{
-                    $hidden = 'd-none';
-                }
-                $form_input .= '<div class="form-group '.$hidden.'">
-                        <label for="inp_'.$no.'">'.$label.'</label>
-                        <input type="text" class="form-control form-control-sm" data-no="'.$params_no.'" id="inp_'.$no.'" />
-                    </div>'; 
-            }
-            $no++;
-        }
-        
-        echo json_encode($form_input);
-    }
-
-    public function insert(){
-        $status = 0;
-        $pesan = 'Gagal Menyimpan Surat Permohonan';
-
-        $id_sample = $this->input->post('surat',TRUE);
-        $tanggal = $this->input->post('tanggal',TRUE);
-        $value_sp = $this->input->post('value_sp');
-        $value_sp = str_replace('null','',$value_sp);
-        
-        $values = [
-            'id_sample_surat' => $id_sample,
-            'tgl_permohonan'  => $tanggal,
-            'username' => $_SESSION['username'],
-            'no_sp' => null,
-            'value_sp' => $value_sp,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),   
-        ];
-        $insert = $this->global_model->insert_data('t_surat_permohonan',$values);
-
-        if($insert){
-            $status = 1;
-            $pesan = 'Berhasil Menyimpan Surat Permohonan';
-        }
-
-        $output = [
-            'status' => $status,
-            'pesan' => $pesan,
-        ];
-        echo json_encode($output);
+        $data['judul']      = $nama_surat;
+        $data['kop_surat']  = $key->kop_surat;
+        $data['isi_surat']  = $template;
+        $this->load->view('permohonan/pdf', $data);
     }
 }
 

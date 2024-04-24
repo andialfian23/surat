@@ -26,7 +26,7 @@ class menu_model extends CI_Model {
 						'menu_link' => 'masuk',
 						'menu_text' => 'Surat Masuk',
 					],[
-						'menu_link' => 'surat_permohonan',
+						'menu_link' => 'permohonan',
 						'menu_text' => 'Surat Permohonan',
 					],[
 						'menu_link' => 'surat_acc',
@@ -57,16 +57,16 @@ class menu_model extends CI_Model {
 				'menu_icon' => 'fas fa-mail-bulk',
 				'menu_child' =>	[
 					[
-						'menu_link' => 'sample_surat',
+						'menu_link' => 'sample',
 						'menu_text' => 'Sample Surat',
 					], [
-						'menu_link' => 'surat_keluar',
+						'menu_link' => 'keluar',
 						'menu_text' => 'Surat Keluar',
 					], [
-						'menu_link' => 'surat_masuk',
+						'menu_link' => 'masuk',
 						'menu_text' => 'Surat Masuk',
 					],[
-						'menu_link' => 'surat_permohonan',
+						'menu_link' => 'permohonan',
 						'menu_text' => 'Surat Permohonan',
 					],[
 						'menu_link' => 'surat_masuk',
@@ -87,7 +87,7 @@ class menu_model extends CI_Model {
 				'menu_icon' => 'fas fa-home'
 			],[
 				'has-sub' => FALSE,
-				'menu_link' => 'surat_permohonan',
+				'menu_link' => 'permohonan',
 				'menu_text' => 'Pengajuan Surat',
 				'menu_color' => '',
 				'menu_icon' => 'fas fa-mail-bulk'

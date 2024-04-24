@@ -36,7 +36,7 @@ class sample extends CI_Controller {
         $pesan = 'Gagal Menyimpan Sample Surat';
         $kop_surat = null;
         
-        $proses_upload1 = $this->global_model->upload_file('kop_surat','images/kop_surat'); 
+        $proses_upload1 = $this->upload_kop_surat('kop_surat'); 
         if($proses_upload1){
             $kop_surat = $proses_upload1;
         }
@@ -97,6 +97,19 @@ class sample extends CI_Controller {
         }
         redirect(base_url('sample'));
     }
+    
+    private function upload_kop_surat($nama_kolom){
+        $config['upload_path'] = './images/kop_surat';
+        $config['allowed_types'] = 'jpg|png|jpeg';
+        $config['max_size'] = '7000';
+        $config['encrypt_name'] = true;
+        $this->load->library('upload', $config);
+        if ($this->upload->do_upload($nama_kolom)) {
+            return $this->upload->data('file_name');
+        } else {
+            return false;
+        }
+    }
 
     public function detail($id_sample){
         $data['judul'] = 'Detail Sample Surat';
@@ -113,4 +126,5 @@ class sample extends CI_Controller {
         ];
         echo json_encode($output);
     }
+    
 }

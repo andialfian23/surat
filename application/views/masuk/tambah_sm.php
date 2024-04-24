@@ -18,24 +18,31 @@
                             <div class="form-group">
                                 <label for="tgl_masuk">Tanggal Surat Masuk</label>
                                 <input type="date" class="form-control form-control-sm" id="tgl_masuk" name="tgl_masuk">
-                                <small id="notif_tgl_masuk" class="text-danger"></small>
+                                <small id="notif_tgl_masuk" class="text-danger">
+                                    <?= form_error('tgl_masuk') ?>
+                                </small>
                             </div>
                             <div class="form-group">
                                 <label for="pengirim">Pengirim</label>
                                 <input type="text" class="form-control form-control-sm" id="pengirim" name="pengirim">
-                                <small id="notif_pengirim" class="text-danger"></small>
+                                <small id="notif_pengirim" class="text-danger">
+                                    <?= form_error('pengirim') ?>
+                                </small>
                             </div>
                             <div class="form-group">
                                 <label for="nomor">Nomor</label>
                                 <input type="text" class="form-control form-control-sm" id="nomor" name="nomor">
-                                <small id="notif_nomor" class="text-danger"></small>
+                                <small id="notif_nomor" class="text-danger">
+                                    <?= form_error('nomor') ?>
+                                </small>
                             </div>
                             <div class="form-group">
                                 <label for="perihal">Perihal</label>
                                 <input type="text" class="form-control form-control-sm" id="perihal" name="perihal">
-                                <small id="notif_perihal" class="text-danger"></small>
+                                <small id="notif_perihal" class="text-danger">
+                                    <?= form_error('perihal') ?>
+                                </small>
                             </div>
-
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">

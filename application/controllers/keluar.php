@@ -11,7 +11,7 @@ class keluar extends CI_Controller {
             redirect(base_url('auth'));
         }
         
-        if($_SESSION['level'] < 3){
+        if($_SESSION['level'] > 2){
             redirect(base_url('dashboard'));
         }
         $this->load->model('surat_keluar_model','surat_keluar');

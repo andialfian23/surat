@@ -21,18 +21,16 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card card-primary card-outline">
-            <div class="card-header">
-                <div class="row d-flex justify-content-between">
-
-                    <div class="col-lg-2 col-md-6 col-sm-12 mt-1">
-                        <span class="mx-2">Surat Masuk</span>
+            <div class="card-body">
+                <div class="row d-flex justify-content-between mx-2 mb-3">
+                    <div class="">
+                        <?php if($_SESSION['level'] != '3'){ ?>
+                        <a href="<?= base_url('Masuk/create') ?>"
+                            class="btn bg-gradient-primary mr-2 mt-1 btn-sm">Tambah Surat Masuk</a>
+                        <?php } ?>
                     </div>
-                    <div class="text-right ml-auto pr-3">
+                    <div class="text-right ml-auto">
                         <div class="input-group input-group-sm">
-                            <?php if($_SESSION['level'] != '3'){ ?>
-                            <a href="<?= base_url('Masuk/create') ?>"
-                                class="btn bg-gradient-primary mr-2 mt-1 btn-sm">Tambah Surat Masuk</a>
-                            <?php } ?>
                             <?php if($_SESSION['level'] == 1){ ?>
                             <div class="input-group-prepend mt-1">
                                 <span class="input-group-text border-warning bg-dark">Fakultas</span>
@@ -59,9 +57,7 @@
                     </div>
 
                 </div>
-            </div>
-            <div class="card-body px-3 py-3 pb-2">
-                <div class="table-responsive p-1">
+                <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover table-sm" id="tbl-surat-masuk"
                         width="100%">
                         <thead class="bg-gradient-dark text-white">

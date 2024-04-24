@@ -25,7 +25,7 @@
                 <div id="form-input"></div>
             </div>
             <div class="card-footer text-center">
-                <a href="<?= base_url('surat_permohonan') ?>" class="btn btn-success" id="btn-save">Kembali</a>
+                <a href="<?= base_url('permohonan') ?>" class="btn btn-success" id="btn-save">Kembali</a>
                 <button type="button" class="btn btn-primary" id="btn-save">Simpan</button>
             </div>
         </div>
@@ -35,7 +35,7 @@
 <script>
 $(document).on('change', '#surat', function() {
     $.ajax({
-        url: '<?= base_url('surat_permohonan/get_sample') ?>',
+        url: '<?= base_url('permohonan/get_sample') ?>',
         type: 'POST',
         data: {
             id: $(this).val()
@@ -71,7 +71,7 @@ $(document).on('click', '#btn-save', function() {
 
 
     $.ajax({
-        url: '<?= base_url('surat_permohonan/insert') ?>',
+        url: '<?= base_url('permohonan/insert') ?>',
         type: 'POST',
         data: {
             surat: $('#surat').val(),
@@ -83,7 +83,7 @@ $(document).on('click', '#btn-save', function() {
             if (res.status == 1) {
                 toastr.success('Berhasil Menyimpan Data');
                 setTimeout(function() {
-                    window.location.replace("<?= base_url('surat_permohonan') ?>");
+                    window.location.replace("<?= base_url('permohonan') ?>");
                 }, 1000);
             } else {
                 toastr.success('Gagal Menyimpan Data');

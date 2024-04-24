@@ -31,7 +31,7 @@
                         <div class="input-group input-group-sm">
 
 
-                            <a href="<?= base_url('surat_permohonan/create') ?>"
+                            <a href="<?= base_url('permohonan/create') ?>"
                                 class="btn bg-gradient-primary mr-2 mt-1 btn-sm">Tambah Surat Permohonan</a>
 
 
@@ -59,7 +59,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="card-body px-3 py-3 pb-2">
@@ -85,8 +84,6 @@
 
 <script>
 $(function() {
-    let localStorage = window.localStorage;
-
     let table = $('#tbl-surat-permohonan').DataTable({
         dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -101,17 +98,17 @@ $(function() {
                 text: 'Tampilkan Data',
                 className: 'btn btn-secondary btn-sm',
             },
-            {
-                extend: 'pdf',
-                text: '<i class="fas fa-print"></i> Cetak Laporan',
-                className: 'btn bg-gradient-blue btn-sm',
-                action: function(e, dt, node, config) {
-                    setTimeout(function() {
-                        window.open("<?= base_url('surat_permohonan/print') ?>",
-                            '_blank');
-                    }, 1000);
-                }
-            },
+            // {
+            //     extend: 'pdf',
+            //     text: '<i class="fas fa-print"></i> Cetak Laporan',
+            //     className: 'btn bg-gradient-blue btn-sm',
+            //     action: function(e, dt, node, config) {
+            //         setTimeout(function() {
+            //             window.open("<?= base_url('permohonan/print') ?>",
+            //                 '_blank');
+            //         }, 1000);
+            //     }
+            // },
         ],
         language: {
             url: "<?= base_url('extra-libs/ID.json') ?>",
@@ -123,7 +120,7 @@ $(function() {
             "targets": [4]
         }],
         ajax: {
-            url: "<?= base_url('surat_permohonan/show') ?>",
+            url: "<?= base_url('permohonan/show') ?>",
             type: "POST",
             data: function(d) {
                 d.xBegin = $('#xBegin').val();
@@ -142,12 +139,12 @@ $(function() {
         }, {
             data: 'id_sp',
             render: function(data, type, row, meta) {
-                return `<a href="<?= base_url('surat_permohonan/pdf/') ?>` + row.id_sp + `" 
+                return `<a href="<?= base_url('permohonan/pdf/') ?>` + row.id_sp + `" 
                             class="badge bg-warning p-1" target="_blank">
                                 <i class="fas fa-file-pdf"></i> Pdf</a>
-                        <a href="<?= base_url('surat_permohonan/edit/') ?>` + row.id_sp + `" 
+                        <a href="<?= base_url('permohonan/edit/') ?>` + row.id_sp + `" 
                             class="badge badge-info p-1"><i class="fas fa-edit"></i> Edit</a>
-                        <a href="<?= base_url('surat_permohonan/delete/') ?>` + row.id_sp + `"
+                        <a href="<?= base_url('permohonan/delete/') ?>` + row.id_sp + `"
                             class="badge badge-danger p-1"
                             onclick="return confirm('Apakah anda yakin akan menghapus data ini?')"><i
                             class="fas fa-trash-alt"></i> Hapus</a>`;
